@@ -1,9 +1,14 @@
 package com.example.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,9 +55,19 @@ public class ControllerClass
 	}
 	
 	@GetMapping("/getdetails")
-	public List<Model> getAll()
+	public List<MappingPojo> getAll()
 	{
-			return service.getAll();
+		List<Model> list = service.getAll();
+		List<MappingPojo> l1=new ArrayList<MappingPojo>();
+		
+		for(Model m:list)
+		{
+			ModelMapper mapper=new ModelMapper();
+			MappingPojo map= mapper.map(m, MappingPojo.class);
+			l1.add(map);
+		}
+		return l1;
+//			return service.getAll();
 	}
 	
 	@GetMapping("/getModel/{l}")

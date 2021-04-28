@@ -1,5 +1,7 @@
 package com.example.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Component;
@@ -20,4 +22,5 @@ public interface repository extends MongoRepository<Model, String>
 
 		@Query(value = "{id : ?0}")
 		MappingPojo findModelByid(int id);
+//		List<MappingPojo> getAll();
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,7 +29,9 @@ public class ServiceClass
 	repository repo;
 	@Autowired
 	MongoTemplate mongo;
-
+	ModelMapper mapi=new ModelMapper();
+	Model m=new Model();
+	
 	Logger logger=(Logger) LoggerFactory.getLogger(ControllerClass.class);
 
 	public @ResponseBody MappingPojo getData(String firstName)  
@@ -43,15 +46,15 @@ public class ServiceClass
 	}
 	public List<Model> getAll()
 	{ 
+	
 		return repo.findAll();
 	}
-	public MappingPojo getModel(int a)
+	public @ResponseBody MappingPojo getModel(int a)
 	{
 		MappingPojo mapping=new MappingPojo();
 		mapping=repo.findModelByid(a);
 		return mapping ;
 	}
-	
 	public List<Model> getModels()
 	{
 		return repo.findAll(Sort.by(Sort.Direction.ASC, "firstName"));
