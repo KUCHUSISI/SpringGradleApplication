@@ -50,24 +50,13 @@ public class ControllerClass
 	@PostMapping("/saveModel")
 	public Model saveModel(@RequestBody Model model)
 	{
-		service.insertData(model);
-		return model;
+		return service.insertData(model);
 	}
 	
 	@GetMapping("/getdetails")
 	public List<MappingPojo> getAll()
 	{
-		List<Model> list = service.getAll();
-		List<MappingPojo> l1=new ArrayList<MappingPojo>();
-		
-		for(Model m:list)
-		{
-			ModelMapper mapper=new ModelMapper();
-			MappingPojo map= mapper.map(m, MappingPojo.class);
-			l1.add(map);
-		}
-		return l1;
-//			return service.getAll();
+			return service.getAll();
 	}
 	
 	@GetMapping("/getModel/{l}")
@@ -76,20 +65,21 @@ public class ControllerClass
 		return service.getModel(l);
 	}
 	
+	// need to create pojo mapping
 	@GetMapping("/getLatest")
-	public Model getModellatest()
+	public MappingPojo getModellatest()
 	{
 		return service.findByCreatedTime();
 	}
 	
 	@GetMapping("/Alphafirst/{A}")
-	public Model getModelAlphafirst(@PathVariable("A") String A)
+	public MappingPojo getModelAlphafirst(@PathVariable("A") String A)
 	{
 		return service.getModelByAlpha(A);
 	}
 	
 	@GetMapping("/AlphafirstTen/{A}")
-	public List<Model> getModelAlphafirstTen(@PathVariable("A") String A)
+	public List<MappingPojo> getModelAlphafirstTen(@PathVariable("A") String A)
 	{
 		return service.getModelsByAlpha(A);
 	}
