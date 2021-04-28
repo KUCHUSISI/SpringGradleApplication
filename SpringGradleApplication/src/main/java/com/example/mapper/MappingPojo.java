@@ -3,6 +3,8 @@ package com.example.mapper;
 
 public class MappingPojo 
 {
+	String firstName;
+	String lastName;
 	int id;
 	public int getId() {
 		return id;
@@ -22,6 +24,5 @@ public class MappingPojo
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	String firstName;
-	String lastName;
+
 }

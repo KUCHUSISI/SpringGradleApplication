@@ -1,78 +1,89 @@
 package com.example.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
-import org.springframework.beans.factory.annotation.Autowired;//import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-//import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.SortByCountOperation;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Model.Model;
+import com.example.controller.ControllerClass;
 import com.example.mapper.MappingPojo;
 import com.example.repository.repository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.model.Sorts;
+
+import ch.qos.logback.classic.Logger;
 
 @Service
 @ComponentScan("com.example.repository")
-public class ServiceClass
+public class ServiceClass 
 {
 	@Autowired(required = true)
 	repository repo;
-	ModelMapper mapper;
-	public MappingPojo getData(String firstName)
+	@Autowired
+	MongoTemplate mongo;
+
+	Logger logger=(Logger) LoggerFactory.getLogger(ControllerClass.class);
+
+	public @ResponseBody MappingPojo getData(String firstName)  
 	{
-		Model m=new Model();
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		MappingPojo mapping=mapper.map(m, MappingPojo.class);
-		return mapping;
-		
-		//		return repo.findByfirstName(firstName);
+		MappingPojo mapping=new MappingPojo();
+		 mapping=repo.findByfirstName(firstName);
+		 return mapping;
 	}
 	public void insertData(Model model)
 	{
 		repo.save(model);
 	}
 	public List<Model> getAll()
-	{
-		List<Model> l=new ArrayList<Model>();
-		List<Model> l1=repo.findAll();
-		for(Model m:l1)
-		{
-			l.add(m);
-		}
-		return l;
+	{ 
+		return repo.findAll();
 	}
-	public Model getModel(int a)
+	public MappingPojo getModel(int a)
 	{
-		return repo.findModelByid(a);
+		MappingPojo mapping=new MappingPojo();
+		mapping=repo.findModelByid(a);
+		return mapping ;
 	}
+	
 	public List<Model> getModels()
 	{
 		return repo.findAll(Sort.by(Sort.Direction.ASC, "firstName"));
 	}
 
-	public List<Model> findByCreatedTime(String date)
+	public Model findByCreatedTime()
 	{
-		List<Model> result =  repo.findAll( Sort.by(Sort.Direction.DESC, "date")); 
-		return result;
+		List<Model> result =  repo.findAll( Sort.by(Sort.Direction.DESC, LocalDate.now().toString())); 
+		return result.get(result.size()-1);
 	}
-
+	public Model getModelByAlpha(String firstName)
+	{
+		 return repo.findAll(Sort.by(Sort.Direction.ASC,"firstName")).get(0);
+	}
 	public List<Model> getModelsByAlpha(String firstName)
 	{
-		return repo.findAll(Sort.by(Sort.Direction.ASC,"firstName"));
+		List<Model> l1=repo.findAll(Sort.by(Sort.Direction.ASC,"firstName"));
+		List<Model> l2=new ArrayList<Model>();
+		int count=0;
+		for(Model m:l1)
+		{ 
+			if(count<10)
+			{
+				l2.add(m);
+				count++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return l2;
 	}
+	// customsing by using post not by using get method
 }
-
