@@ -29,12 +29,10 @@ public class ServiceClass
 	@Autowired(required = true)
 	repository repo;
 	Logger logger=(Logger) LoggerFactory.getLogger(ControllerClass.class);
-	MongoTemplate mongo;
-	MappingPojo mapping=new MappingPojo();
 	ModelMapper mapper=new ModelMapper();
 	public @ResponseBody MappingPojo getData(String firstName)  
 	{
-	
+		MappingPojo mapping=new MappingPojo();
 		 mapping=repo.findByfirstName(firstName);
 		 return mapping;
 	}
@@ -58,6 +56,7 @@ public class ServiceClass
 	}
 	public @ResponseBody MappingPojo getModel(int a)
 	{
+		MappingPojo mapping=new MappingPojo();
 		mapping=repo.findModelByid(a);
 		return mapping ;
 	}
@@ -70,7 +69,6 @@ public class ServiceClass
 	{
 		List<Model> result = repo.findAll( Sort.by(Sort.Direction.DESC, LocalDate.now().toString())); 
 		Model model=result.get(result.size()-1);
-
 		MappingPojo map=mapper.map(model, MappingPojo.class);
 		return map;
 	}
@@ -89,7 +87,7 @@ public class ServiceClass
 		{ 
 			if(count<10)
 			{
-					MappingPojo map= mapper.map(m, MappingPojo.class);
+				MappingPojo map= mapper.map(m, MappingPojo.class);
 				l2.add(map);
 				count++;
 			}
@@ -105,13 +103,26 @@ public class ServiceClass
 		List<Model> l=repo.findBydateLessThan(date);
 		return l.get(l.size()-1);
 	}
-	public List<Model> findTop10ByOrderByfirstNameAsc()
+	
+	public List<MappingPojo> findTop10ByOrderByfirstNameAsc()
 	{
-		return repo.findFirst10ByOrderByLastnameAsc();
+		return repo.findFirst10ByOrderByFirstNameAsc();
 	}
-//	public List<Model> findByOrderByfirstNameAsc()
-//	{
-//		return repo.findByOrderByfirstNameAsc();
-//	}
+	
+	public List<MappingPojo> findByFirstnameStartingWith(String A)
+	{
+		return repo.findByFirstNameStartingWith(A);
+	}
+
+	public List<MappingPojo> findFirstByOrderByFirstNameDesc()
+	{
+		return repo.findFirstByOrderByFirstNameDesc();
+	}
+	public List<MappingPojo> findFirstByOrderByFirstNameAsc()
+	{
+		return repo.findFirstByOrderByFirstNameAsc();
+	}
+	
+	
 	// customsing by using post not by using get method
 }

@@ -23,8 +23,16 @@ public interface repository extends MongoRepository<Model, String>
 
 		@Query(value = "{id : ?0}")
 		MappingPojo findModelByid(int id);
+		
+		
+		
 		public List<Model> findBydateLessThan(String date);
-//		public List<Model> findByOrderByfirstNameAsc();
-		public List<Model> findFirst10ByOrderByLastnameAsc();
-//		public List<Model> findAllByTop10ByOrderByfirstNameAsc();
+
+		public List<MappingPojo> findFirstByOrderByFirstNameAsc();
+		
+		public List<MappingPojo> findByFirstNameStartingWith(String A);
+		
+		public List<MappingPojo> findFirstByOrderByFirstNameDesc();
+		
+		public List<MappingPojo> findFirst10ByOrderByFirstNameAsc();
 }

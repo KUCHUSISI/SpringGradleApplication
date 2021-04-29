@@ -80,20 +80,46 @@ public class ControllerClass
 	}
 	//Check with mongo template 
 	// mongo db limit and skip 
+	
+	
+	
+	
+//	@GetMapping("/findModelBydateLesserThan")
+//	public Model findModelBydateLesserThan()
+//	{
+//		return service.findModelBydateLesserThan(LocalDate.now().toString());
+//	}
+	
+	
+	
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	@GetMapping("/findModelBydateLesserThan")
 	public Model findModelBydateLesserThan()
 	{
 		return service.findModelBydateLesserThan(LocalDate.now().toString());
 	}
-	@GetMapping("/findTop10ByOrderByfirstNameAsc")
-	public List<Model> findTop10ByOrderByfirstNameAsc()
+	@GetMapping("/findFirst10ByOrderByFirstNameAsc")
+	public List<MappingPojo> findFirst10ByOrderByFirstNameAsc()
 	{
 		return service.findTop10ByOrderByfirstNameAsc();
 	}
-//	@GetMapping("/findAllByOrderBydateDesc")
-//	public List<Model> findByOrderByfirstNameAsc()
-//	{
-//		return service.findByOrderByfirstNameAsc();
-//	}
 	
+	@GetMapping("/findFirstByOrderByFirstNameDesc")
+	public List<MappingPojo> findFirstByOrderByFirstNameDesc()
+	{
+		return service.findFirstByOrderByFirstNameDesc();
+	}
+	
+	@GetMapping("/findFirstByOrderByFirstNameAsc")
+	public List<MappingPojo> findFirstByOrderByFirstNameAsc()
+	{
+		return service.findFirstByOrderByFirstNameAsc();
+	}
+	
+	@GetMapping("/findByFirstnameStartingWith/{A}")
+	public List<MappingPojo> findByFirstnameStartingWith(@PathVariable("A") String A)
+	{
+		return service.findByFirstnameStartingWith(A);
+	}
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @SpringBootApplication(scanBasePackages = "com.example")
 @EnableMongoRepositories("com.example.repository")
 @Configuration
-//@EnableJpaRepositories
 public class SpringGradleApplication
 {
 	public static void main(String[] args) 
