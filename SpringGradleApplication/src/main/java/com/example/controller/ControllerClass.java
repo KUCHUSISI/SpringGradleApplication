@@ -1,14 +1,10 @@
 package com.example.controller;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,8 +60,7 @@ public class ControllerClass
 	{
 		return service.getModel(l);
 	}
-	
-	// need to create pojo mapping
+
 	@GetMapping("/getLatest")
 	public MappingPojo getModellatest()
 	{
@@ -85,4 +80,20 @@ public class ControllerClass
 	}
 	//Check with mongo template 
 	// mongo db limit and skip 
+	@GetMapping("/findModelBydateLesserThan")
+	public Model findModelBydateLesserThan()
+	{
+		return service.findModelBydateLesserThan(LocalDate.now().toString());
+	}
+	@GetMapping("/findTop10ByOrderByfirstNameAsc")
+	public List<Model> findTop10ByOrderByfirstNameAsc()
+	{
+		return service.findTop10ByOrderByfirstNameAsc();
+	}
+//	@GetMapping("/findAllByOrderBydateDesc")
+//	public List<Model> findByOrderByfirstNameAsc()
+//	{
+//		return service.findByOrderByfirstNameAsc();
+//	}
+	
 }

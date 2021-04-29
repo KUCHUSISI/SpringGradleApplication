@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,10 +29,12 @@ public class ServiceClass
 	@Autowired(required = true)
 	repository repo;
 	Logger logger=(Logger) LoggerFactory.getLogger(ControllerClass.class);
-
+	MongoTemplate mongo;
+	MappingPojo mapping=new MappingPojo();
+	ModelMapper mapper=new ModelMapper();
 	public @ResponseBody MappingPojo getData(String firstName)  
 	{
-		MappingPojo mapping=new MappingPojo();
+	
 		 mapping=repo.findByfirstName(firstName);
 		 return mapping;
 	}
@@ -41,22 +45,19 @@ public class ServiceClass
 	}
 	public List<MappingPojo> getAll()
 	{ 
-	
-//		return repo.findAll();
 		List<Model> list =repo.findAll();
 		List<MappingPojo> l1=new ArrayList<MappingPojo>();
 		
 		for(Model m:list)
 		{
-			ModelMapper mapper=new ModelMapper();
 			MappingPojo map= mapper.map(m, MappingPojo.class);
 			l1.add(map);
 		}
 		return l1;
+		
 	}
 	public @ResponseBody MappingPojo getModel(int a)
 	{
-		MappingPojo mapping=new MappingPojo();
 		mapping=repo.findModelByid(a);
 		return mapping ;
 	}
@@ -67,15 +68,15 @@ public class ServiceClass
 
 	public MappingPojo findByCreatedTime()
 	{
-		Model result = repo.findAll( Sort.by(Sort.Direction.DESC, LocalDate.now().toString())).get(0); 
-		ModelMapper mapper=new ModelMapper();
-		MappingPojo map=mapper.map(result, MappingPojo.class);
+		List<Model> result = repo.findAll( Sort.by(Sort.Direction.DESC, LocalDate.now().toString())); 
+		Model model=result.get(result.size()-1);
+
+		MappingPojo map=mapper.map(model, MappingPojo.class);
 		return map;
 	}
 	public MappingPojo getModelByAlpha(String firstName)
 	{
 		 Model model = repo.findAll(Sort.by(Sort.Direction.ASC,"firstName")).get(0);
-		 ModelMapper mapper=new ModelMapper();
 			MappingPojo map= mapper.map(model, MappingPojo.class);
 		 return map;
 	}
@@ -88,7 +89,6 @@ public class ServiceClass
 		{ 
 			if(count<10)
 			{
-				 ModelMapper mapper=new ModelMapper();
 					MappingPojo map= mapper.map(m, MappingPojo.class);
 				l2.add(map);
 				count++;
@@ -100,5 +100,18 @@ public class ServiceClass
 		}
 		return l2;
 	}
+	public Model findModelBydateLesserThan(String date)
+	{
+		List<Model> l=repo.findBydateLessThan(date);
+		return l.get(l.size()-1);
+	}
+	public List<Model> findTop10ByOrderByfirstNameAsc()
+	{
+		return repo.findFirst10ByOrderByLastnameAsc();
+	}
+//	public List<Model> findByOrderByfirstNameAsc()
+//	{
+//		return repo.findByOrderByfirstNameAsc();
+//	}
 	// customsing by using post not by using get method
 }

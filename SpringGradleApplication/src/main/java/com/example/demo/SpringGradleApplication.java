@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @SpringBootApplication(scanBasePackages = "com.example")
 @EnableMongoRepositories("com.example.repository")
 @Configuration
+//@EnableJpaRepositories
 public class SpringGradleApplication
 {
 	public static void main(String[] args) 
